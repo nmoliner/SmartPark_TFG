@@ -1,0 +1,202 @@
+# ============================================================================
+# config.yaml
+# ----------------------------------------------------------------------------
+# Configuracion centralizada del prototipo SmartPark Madrid.
+# Todos los parametros del pipeline y de la app se definen aqui para evitar
+# valores hardcodeados en el codigo y facilitar la trazabilidad academica:
+# cualquier decision metodologica del capitulo 6 de la memoria se ve reflejada
+# en este fichero.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Rutas
+# ----------------------------------------------------------------------------
+paths:
+  # Datos crudos descargados de datos.madrid.es (ruta relativa al raiz)
+  raw:
+    tickets_csv: "Primertrimestre2025 SER tickets aparcamiento.csv"
+    parquimetros_xlsx: "300481-3-ser-parquimetros-xlsx.xlsx"
+    plazas_xlsx: "218228-0-ser-calles SER CALLES Y PLAZAS-xlsx.xlsx"
+  # Datos procesados (formato Parquet)
+  processed_dir: "data"
+  outputs:
+    tickets_m30: "tickets_m30.parquet"
+    parquimetros: "parquimetros.parquet"
+    agregados: "agregados.parquet"
+
+# ----------------------------------------------------------------------------
+# Ambito de estudio (cap. 1.2 de la memoria)
+# ----------------------------------------------------------------------------
+ambito:
+  # Distritos del interior de la M-30. Filtro geografico aplicado en clean.py
+  distritos_m30:
+    - CENTRO
+    - ARGANZUELA
+    - RETIRO
+    - SALAMANCA
+    - CHAMARTIN
+    - TETUAN
+    - CHAMBERI
+    - MONCLOA-ARAVACA
+
+# ----------------------------------------------------------------------------
+# Parametros de procesado del CSV grande (~1.4 GB)
+# ----------------------------------------------------------------------------
+ingest:
+  csv_separator: ";"
+  chunk_size: 500000
+  required_columns:
+    - matricula_parquimetro
+    - fecha_operacion
+    - fecha_inicio
+    - fecha_fin
+    - cod_distrito
+    - distrito
+    - cod_barrio
+    - barrio
+    - tipo_zona
+    - distintivo
+    - minutos_tique
+    - importe_tique
+
+# ----------------------------------------------------------------------------
+# Modelo de scoring (cap. 6.4 de la memoria)
+# ----------------------------------------------------------------------------
+scoring:
+  # Mapeo de niveles cualitativos a puntuacion numerica
+  level_to_score:
+    Baja: 1
+    Media: 2
+    Alta: 3
+  # Rango teorico del score combinado: 4 dimensiones x 1..3 puntos = [4, 12]
+  score_min: 4
+  score_max: 12
+  # Saturacion de probabilidad: el sistema nunca da certezas absolutas
+  prob_floor: 10.0
+  prob_ceil: 90.0
+  # Umbrales para etiqueta cualitativa de probabilidad (%)
+  prob_thresholds:
+    high: 65.0
+    medium: 40.0
+  # Variables sobre las que se calculan terciles de presion
+  dimensions:
+    - distrito
+    - hora
+    - tipo_zona
+    - distintivo
+
+# ----------------------------------------------------------------------------
+# Simulador de reserva (cap. 6.5 de la memoria)
+# ----------------------------------------------------------------------------
+reservation:
+  # Minutos antes de fecha_fin para considerar un ticket como candidato a liberacion
+  liberation_window_min: 20
+  # Minutos despues de fecha_fin para considerar que hubo renovacion del ticket
+  renewal_window_min: 5
+  # Minutos durante los que la reserva permanece bloqueada en la app
+  reservation_hold_min: 5
+  # Patron regex para detectar matriculas validas (numericas) y excluir apps moviles
+  physical_meter_regex: '^\d+$'
+
+# ----------------------------------------------------------------------------
+# Perfilado de barrios (BarrioProfiler, cap. 6 de la memoria)
+# ----------------------------------------------------------------------------
+profiling:
+  # Umbrales para inferir la tipologia del barrio a partir de metricas reales.
+  # Cualquier ajuste fino se hace aqui, sin tocar el codigo.
+  thresholds:
+    azul_alto: 60          # % zona AZUL para considerar barrio "comercial"
+    verde_alto: 60         # % zona VERDE para considerar barrio "residencial"
+    duracion_corta_min: 90 # Tickets cortos (< 1h30): rotacion alta
+    duracion_larga_min: 120 # Tickets largos (> 2h): estacionamiento prolongado
+    rotacion_alta_pct: 60  # Tasa de no-renovacion para considerar rotacion alta
+    pico_oficina_min: 9    # Hora pico tipica de barrios de oficinas
+    pico_oficina_max: 11
+
+# ----------------------------------------------------------------------------
+# Routing y ETA (origen → destino, sincronizacion con liberaciones)
+# ----------------------------------------------------------------------------
+routing:
+  urban_speed_kmh: 18         # Velocidad media en ciudad (Madrid centro/M-30)
+  sync_window_min: 4          # Tolerancia llegada vs liberacion (min)
+  destino_calle_radio_m: 400  # Radio de busqueda alrededor de una calle destino (m)
+
+# ----------------------------------------------------------------------------
+# App Streamlit
+# ----------------------------------------------------------------------------
+app:
+  default_date: "2025-01-23"  # Jueves laborable
+  default_hour: 12
+  default_minute: 30
+  hour_range: [8, 22]
+  # Catalogos de opciones en los selectores
+  options:
+    distritos:
+      - CHAMARTIN
+      - SALAMANCA
+      - CHAMBERI
+      - RETIRO
+      - ARGANZUELA
+      - TETUAN
+      - CENTRO
+    tipos_zona:
+      - AZUL
+      - VERDE
+      - COMERCIALES
+      - ALTA ROTACION
+    distintivos:
+      - C
+      - B
+      - ECO
+      - CERO
+  # Avisos contextuales segun la etiqueta DGT del vehiculo del usuario.
+  # Reglas vigentes en Madrid (Ordenanza de Movilidad Sostenible 2021 +
+  # ZBEDEP Distrito Centro). type: "info" / "warning" / "success" / "error"
+  distintivo_avisos:
+    CERO:
+      type: "success"
+      icon: "🟢"
+      title: "Privilegio etiqueta CERO"
+      body: >
+        Aparcas **gratis y sin límite de tiempo** en cualquier zona SER de Madrid
+        y tienes acceso libre a la ZBE del Distrito Centro. La estimación se
+        realiza con valores neutros (estos vehículos no generan tickets).
+    ECO:
+      type: "info"
+      icon: "🟦"
+      title: "Etiqueta ECO · 50% de descuento"
+      body: >
+        Disfrutas de un **50% de descuento** sobre la tarifa SER y puedes
+        permanecer **hasta 2 horas** (1 h adicional sobre la base). Acceso
+        permitido al Distrito Centro.
+    C:
+      type: "warning"
+      icon: "🟡"
+      title: "Etiqueta C · Restricciones en Distrito Centro"
+      body: >
+        Tarifa SER completa, máximo de estacionamiento estándar. Si tu destino
+        está en el **Distrito Centro (ZBEDEP)**, no puedes aparcar en calle
+        salvo que seas residente: deberás dirigirte a un **parking público
+        de pago** o estacionar fuera de la zona protegida.
+    B:
+      type: "warning"
+      icon: "🟠"
+      title: "Etiqueta B · Restricciones severas en Distrito Centro"
+      body: >
+        Tarifa SER completa. Restricciones más severas que la C en el
+        **Distrito Centro**: solo residentes, parkings públicos o vehículos
+        en servicio. Recomendado dirigirse directamente a un parking
+        rotacional fuera de la ZBE.
+  # Configuracion del mapa folium
+  map:
+    center_madrid: [40.4168, -3.7038]
+    default_zoom: 16
+    tiles: "cartodbpositron"
+    max_markers_reservation: 50
+    color_scale:
+      high: "#16a34a"      # verde vivo (Tailwind green-600)
+      medium: "#f59e0b"    # ambar (Tailwind amber-500)
+      low: "#dc2626"       # rojo vivo (Tailwind red-600)
+  # Diccionario de saneamiento de codificacion (Ñ rota en dataset original)
+  text_fixes:
+    "�": "Ñ"

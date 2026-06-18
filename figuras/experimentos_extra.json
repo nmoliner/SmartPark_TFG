@@ -1,0 +1,75 @@
+{
+  "cv_temporal": {
+    "n_dias": 5,
+    "spearman_media": -0.6725,
+    "spearman_desviacion": 0.0803,
+    "spearman_min": -0.7737,
+    "spearman_max": -0.598,
+    "detalle": [
+      {
+        "fecha": "2025-01-20",
+        "dia_semana": "Monday",
+        "n_test_tickets": 136556,
+        "n_observaciones": 84,
+        "spearman_modelo": -0.6382,
+        "spearman_aleatorio": -0.1145
+      },
+      {
+        "fecha": "2025-02-05",
+        "dia_semana": "Wednesday",
+        "n_test_tickets": 141504,
+        "n_observaciones": 84,
+        "spearman_modelo": -0.61,
+        "spearman_aleatorio": -0.144
+      },
+      {
+        "fecha": "2025-02-22",
+        "dia_semana": "Saturday",
+        "n_test_tickets": 71842,
+        "n_observaciones": 42,
+        "spearman_modelo": -0.7737,
+        "spearman_aleatorio": -0.1229
+      },
+      {
+        "fecha": "2025-03-10",
+        "dia_semana": "Monday",
+        "n_test_tickets": 135451,
+        "n_observaciones": 84,
+        "spearman_modelo": -0.598,
+        "spearman_aleatorio": -0.094
+      },
+      {
+        "fecha": "2025-03-15",
+        "dia_semana": "Saturday",
+        "n_test_tickets": 71644,
+        "n_observaciones": 42,
+        "spearman_modelo": -0.7426,
+        "spearman_aleatorio": -0.1328
+      }
+    ]
+  },
+  "sensibilidad_alpha": {
+    "valores_probados": [
+      1,
+      5,
+      20
+    ],
+    "n_celdas_evaluadas": 34342,
+    "jaccard_1_vs_5": 0.176,
+    "jaccard_5_vs_20": 0.429,
+    "jaccard_1_vs_20": 0.053
+  },
+  "baseline_supervisado": {
+    "modelo": "Regresion lineal con OneHotEncoding(distrito, hora)",
+    "spearman_baseline_supervisado": 0.8603,
+    "spearman_smartpark": -0.7426,
+    "n_celdas": 42,
+    "comentario": "Signo esperado: positivo para el baseline supervisado (predice presion directamente) y negativo para SmartPark (predice probabilidad inversa a la presion)."
+  },
+  "robustez_chamartin": {
+    "spearman_completo": -0.7426,
+    "spearman_sin_chamartin": -0.8237,
+    "n_test_tickets_sin": 54227,
+    "delta": -0.0811
+  }
+}

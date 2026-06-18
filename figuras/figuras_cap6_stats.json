@@ -1,0 +1,83 @@
+{
+  "fig_01_horaria": {
+    "hora_pico": 12,
+    "tickets_hora_pico": 1183632,
+    "pct_manana_10_14": 44.1,
+    "pct_tarde_17_19": 24.6,
+    "pct_franja_nocturna": 1.6
+  },
+  "fig_02_top10_distritos": {
+    "lider": "CHAMARTIN",
+    "tickets_lider": 2471295,
+    "segundo": "SALAMANCA",
+    "tickets_segundo": 1565843,
+    "tercero": "CHAMBERI",
+    "tickets_tercero": 1552511,
+    "pct_top3_sobre_total": 43.9,
+    "pct_top10_sobre_total": 95.9,
+    "ratio_lider_vs_decimo": 4.7
+  },
+  "fig_03_terciles": {
+    "n_distritos": 13,
+    "n_alta": 4,
+    "n_media": 4,
+    "n_baja": 5
+  },
+  "fig_04_tipo_zona": {
+    "ranking": [
+      "VERDE",
+      "AZUL",
+      "COMERCIALES",
+      "USO DISUASORIO",
+      "AZUL SANITARIA",
+      "ALTA ROTACION",
+      "TALLERES"
+    ],
+    "pct": {
+      "VERDE": 54.6,
+      "AZUL": 38.0,
+      "COMERCIALES": 5.5,
+      "USO DISUASORIO": 1.0,
+      "AZUL SANITARIA": 0.6,
+      "ALTA ROTACION": 0.4,
+      "TALLERES": 0.0
+    }
+  },
+  "fig_05_plazas": {
+    "total_plazas": 181272,
+    "distrito_max_plazas": "CHAMARTIN",
+    "plazas_max": 28729,
+    "distrito_min_plazas": "CARABANCHEL",
+    "plazas_min": 2798
+  },
+  "fig_06_parquimetros": {
+    "total_parquimetros": 6246,
+    "distrito_max_parq": "CHAMARTIN",
+    "parq_max": 1561,
+    "correlacion_plazas_parq": 0.847
+  },
+  "fig_07_ratio": {
+    "top3": [
+      {
+        "distrito": "CHAMBERI",
+        "ratio": 101.8
+      },
+      {
+        "distrito": "SALAMANCA",
+        "ratio": 90.1
+      },
+      {
+        "distrito": "CHAMARTIN",
+        "ratio": 86.0
+      }
+    ],
+    "ratio_mediano": 69.8,
+    "ratio_min": 5.2,
+    "ratio_lider_vs_mediano": 1.5
+  },
+  "fig_08_normalizado": {
+    "n_desequilibrados": 0,
+    "n_equilibrados": 6,
+    "top3_gap": []
+  }
+}

@@ -1,0 +1,8 @@
+pandas>=2.0
+numpy
+pyarrow
+openpyxl
+folium
+streamlit
+matplotlib
+pyyaml
