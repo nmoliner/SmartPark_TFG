@@ -6,3 +6,4 @@ folium
 streamlit
 matplotlib
 pyyaml
+streamlit_folium

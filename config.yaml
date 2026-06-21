@@ -158,7 +158,7 @@ app:
       icon: "🟢"
       title: "Privilegio etiqueta CERO"
       body: >
-        Aparcas **gratis y sin límite de tiempo** en cualquier zona SER de Madrid
+        Aparcas gratis y sin límite de tiempo en cualquier zona SER de Madrid
         y tienes acceso libre a la ZBE del Distrito Centro. La estimación se
         realiza con valores neutros (estos vehículos no generan tickets).
     ECO:
@@ -166,7 +166,7 @@ app:
       icon: "🟦"
       title: "Etiqueta ECO · 50% de descuento"
       body: >
-        Disfrutas de un **50% de descuento** sobre la tarifa SER y puedes
+        Disfrutas de un 50% de descuento sobre la tarifa SER y puedes
         permanecer **hasta 2 horas** (1 h adicional sobre la base). Acceso
         permitido al Distrito Centro.
     C:
@@ -175,7 +175,7 @@ app:
       title: "Etiqueta C · Restricciones en Distrito Centro"
       body: >
         Tarifa SER completa, máximo de estacionamiento estándar. Si tu destino
-        está en el **Distrito Centro (ZBEDEP)**, no puedes aparcar en calle
+        está en el Distrito Centro (ZBEDEP), no puedes aparcar en calle
         salvo que seas residente: deberás dirigirte a un **parking público
         de pago** o estacionar fuera de la zona protegida.
     B:
@@ -184,7 +184,7 @@ app:
       title: "Etiqueta B · Restricciones severas en Distrito Centro"
       body: >
         Tarifa SER completa. Restricciones más severas que la C en el
-        **Distrito Centro**: solo residentes, parkings públicos o vehículos
+        Distrito Centro: solo residentes, parkings públicos o vehículos
         en servicio. Recomendado dirigirse directamente a un parking
         rotacional fuera de la ZBE.
   # Configuracion del mapa folium
