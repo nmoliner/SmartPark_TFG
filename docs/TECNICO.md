@@ -278,7 +278,7 @@ Todos los parámetros (rutas, filtros, umbrales, colores…) se editan en `confi
 
 ---
 
-## 11. Resumen para la defensa (chuleta de 30 segundos)
+## 11. Resumen 
 
 - **El proyecto convierte 9,7 millones de tickets reales en una recomendación útil para el conductor.**
 - **No se ha entrenado un modelo de caja negra**: se usa un sistema de puntuación transparente y defendible.
